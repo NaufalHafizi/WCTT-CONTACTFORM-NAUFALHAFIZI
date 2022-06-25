@@ -17,7 +17,7 @@ use yii\behaviors\TimestampBehavior;
  */
 class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
-    private $id;
+    private $_id;
     public $username;
     public $password;
     public $authKey;
@@ -92,7 +92,7 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function getId()
     {
-        return $this->id;
+        return $this->_id;
     }
 
     /**
