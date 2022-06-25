@@ -75,6 +75,18 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         ];
     }
 
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+            [
+                'class' => BlameableBehavior::class,
+                'updatedByAttribute' => false,
+                'createdByAttribute' => false
+            ]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
