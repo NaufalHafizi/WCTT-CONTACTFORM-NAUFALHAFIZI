@@ -22,7 +22,11 @@ composer install
 php yii migrate
 ```
 
-5. Run your local. Make sure to use port 8080. Otherwise, you need to change the port in frontend - php yii serve -p 8080
+5. Run your local. Make sure to use port 8080. Otherwise, you need to change the port in frontend
+
+```
+php yii serve -p 8080
+```
 
 ## Contributions
 
