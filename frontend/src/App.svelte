@@ -1,3 +1,34 @@
+<script>
+  let name = "";
+  let email = "";
+  let description = "";
+  let hasBeenClicked = false;
+
+  function validateEmail(email) {
+    var emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;  
+    return emailRegEx.test(String(email).toLowerCase());
+  }
+
+  function handleSubmission() {
+    hasBeenClicked = true;
+
+    if (isValidName && isValidEmail && isValidDescription) {
+      // Send data somewhere
+      alert("submitted");
+    }
+  }
+
+  $: isValidName = name.length > 0;
+  $: isValidDescription = description.length > 0;
+  $: isValidEmail = validateEmail(email);
+</script>
+
+<style>
+  .validation-error {
+    color: red;
+    margin-top: 5px;
+  }
+</style>
 
 <main>
   <div class="min-h-screen bg-gray-100 text-gray-800 antialiased px-4 py-6 flex flex-col justify-center sm:py-12">
@@ -9,16 +40,25 @@
           
           <!-- svelte-ignore a11y-label-has-associated-control -->
           <label class="block font-semibold">Name<label>
-          <input type="text" placeholder="Name" class="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md">
+          <input type="text" bind:value={name} placeholder="Name" class="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md">
+          {#if hasBeenClicked && !isValidName} 
+            <p class="validation-error">Please enter a name</p>
+          {/if}
           
           <label class="block pt-4 font-semibold">Email<label>
-          <input type="text" placeholder="Email" class="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md">
+          <input type="text" bind:value={email} placeholder="Email" class="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md">
+          {#if hasBeenClicked && !isValidEmail} 
+            <p class="validation-error">Invalid email</p>
+          {/if}
           
           <label class="block pt-4 font-semibold">Description<label>
-          <textarea placeholder="Description" class="border block w-full px-3 py-1.5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md"></textarea>
+          <textarea bind:value={description} placeholder="Description" class="border block w-full px-3 py-1.5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md"></textarea>
+          {#if hasBeenClicked && !isValidName} 
+            <p class="validation-error">Please enter a description</p>
+          {/if}
           
           <div class="flex justify-center">
-            <button class="mt-4 bg-indigo-500 text-white py-2 px-6 rounded-lg">Submit</button>
+            <button on:click={handleSubmission} class="mt-4 bg-indigo-500 text-white py-2 px-6 rounded-lg">Submit</button>
           </div>
         </div>
       </div>
