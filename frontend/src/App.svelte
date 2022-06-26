@@ -4,6 +4,8 @@
   let description = "";
   let hasBeenClicked = false;
   let showLoading = false;
+  let apiMessage = '';
+  let apiIsFailed = false;
 
   function validateEmail(email) {
     var emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;  
@@ -29,12 +31,21 @@
             "description": description
         })
       })
+      .then(async response => {
+        if(response.status != 201){
+          apiMessage = 'Something went wrong happened. Please try again!';
+          apiIsFailed = true;
+        } else {
+          apiMessage = 'The form has been successfully submitted';
+          apiIsFailed = false;
+        }
+      })
+      .catch(err => {
+        apiMessage = 'Something went wrong happened. Please try again!';
+        apiIsFailed = true;
+      })
 
       showLoading = false;
-
-      const json = await res.json()
-      console.log(json);
-      // result = JSON.stringify(json)
     }
   }
 
@@ -57,6 +68,13 @@
       <div class="relative mt-4 bg-white shadow-md sm:rounded-lg text-left">
         <div class="h-2 bg-indigo-400 rounded-t-md"></div>
         <div class="py-6 px-8">
+
+          {#if apiMessage.length > 0}
+          <div class="{apiIsFailed ? 'bg-red-100 border-red-400 text-red-700' : 'bg-blue-100 border-blue-400 text-blue-700'} border px-4 py-3 rounded relative mb-5" role="alert">
+            <strong class="font-bold">{apiIsFailed ? 'Oops!' : 'Thank You!'}</strong>
+            <span class="block sm:inline">{apiMessage}</span>
+          </div>
+          {/if}
           
           <!-- svelte-ignore a11y-label-has-associated-control -->
           <label class="block font-semibold">Name<label>
