@@ -9,12 +9,27 @@
     return emailRegEx.test(String(email).toLowerCase());
   }
 
-  function handleSubmission() {
+  async function handleSubmission() {
     hasBeenClicked = true;
 
     if (isValidName && isValidEmail && isValidDescription) {
-      // Send data somewhere
-      alert("submitted");
+
+      const res = await fetch('http://localhost:8080/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            "name": name,
+            "email": email,
+            "description": description
+        })
+      })
+      
+      const json = await res.json()
+      console.log(json);
+      // result = JSON.stringify(json)
     }
   }
 
@@ -53,7 +68,7 @@
           
           <label class="block pt-4 font-semibold">Description<label>
           <textarea bind:value={description} placeholder="Description" class="border block w-full px-3 py-1.5 mt-2 hover:outline-none focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md"></textarea>
-          {#if hasBeenClicked && !isValidName} 
+          {#if hasBeenClicked && !isValidDescription} 
             <p class="validation-error">Please enter a description</p>
           {/if}
           
